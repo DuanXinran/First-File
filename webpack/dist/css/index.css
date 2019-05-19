@@ -1,0 +1,12 @@
+body {
+  background: red;
+}
+
+body {
+  background: blue url(images/b844b46e48ffd31b78c7ecbba7101ef7.jpg);
+}
+
+img {
+  -webkit-transform: rotate(10deg);
+  transform: rotate(10deg);
+}

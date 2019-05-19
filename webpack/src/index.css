@@ -1,0 +1,7 @@
+body{
+    background: blue url(./images/006.jpg); 
+    
+}
+img{
+    transform: rotate(10deg);
+}
