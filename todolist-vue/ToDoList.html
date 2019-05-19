@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        thead {
+
+            background-color: rgb(223, 223, 248);
+
+
+        }
+
+        table {
+            width: 100%;
+            height: 3px;
+            border-color: black;
+            background-color: rgb(246, 246, 255);
+
+            text-align: center;
+            line-height: 50px;
+
+        }
+
+
+        th {
+            text-align: center;
+            background-color: rgb(223, 223, 248);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        button {
+
+            background-color: #d3a6a6;
+            height: 30px;
+
+        }
+
+        #add {
+            height: 50px;
+            width: 550px;
+            margin: auto;
+        }
+
+        #search {
+            height: 50px;
+            width: 250px;
+            margin: auto;
+        }
+
+        img {
+
+            width: 15px;
+            height: 15px;
+        }
+
+        .red {
+            background-color: #d3a6a6;
+        }
+    </style>
+</head>
+
+<body>
+
+
+
+    <div id="table">
+
+        <h1>ToDoList</h1>
+        <hr>
+        <div id="add">
+            名称：<input type="text" v-model="name" placeholder="请输入名称"> &nbsp; 价格：<input type="text" v-model="price"
+                placeholder="请输入价格">
+            <button @click="add()">提交</button>
+
+        </div>
+        <div id="search">
+            <input type="text" placeholder="请输入名称" v-model="searchName"> <button @click="search"
+                class="btn btn-danger">搜索</button>
+
+
+        </div>
+
+
+
+        <table class="table-bordered">
+
+            <tr>
+                <th><input type="checkbox" v-model="all" @click.stop="selall(all)"> 全选</th>
+                <th>名称</th>
+                <th>价格</th>
+                <th>删除</th>
+            </tr>
+
+
+            <tr v-for="(item,index) in List" @click="excolor(item,index)" :class="{red: item.isRed}">
+                <td> <input type="checkbox" v-model="item.isRed" :value="index"> </td>
+                <td> {{item.name}}</td>
+                <td> {{item.price}}</td>
+                <td> <button @click.stop="del(index)" class="btn btn-danger"> 删除</button></td>
+
+            </tr>
+
+            <tr>
+                <td><button @click="delall()" class="btn btn-danger"> 全部删除</button> </td>
+                <td> 总价 </td>
+                <td>{{sum()}}</td>
+
+            </tr>
+
+
+
+
+
+        </table>
+
+
+    </div>
+
+
+    <script src='vue.js'></script>
+    <script>
+        new Vue({
+            el: '#table',
+
+
+            data: {
+
+                name: '',
+                price: '',
+
+                searchName: '',
+                all: '',
+                checke: [],
+                List: [{
+                    name: "衣服",
+                    price: 100,
+                    isRed: false
+                }, {
+                    name: "鞋子",
+                    price: 200,
+                    isRed: false
+
+                }, {
+
+                    name: "裤子",
+                    price: 300,
+                    isRed: false
+                }]
+
+
+            },
+            methods: {
+                excolor(item, index) {
+                    if (item.isRed) {
+                        this.checke.splice(this.checke.indexOf(index), 1);
+                    } else {
+                        this.checke.push(index);
+                    }
+                    item.isRed = !item.isRed;
+
+
+
+                },
+                sum() {
+                    var totalPrice = 0;
+                    this.List.forEach(function (pro, idx) {
+                        if (pro.isRed) {
+                            totalPrice += pro.price * 1;
+                        }
+                    });
+                    return totalPrice;
+                },
+                add() {
+                    this.List.push({
+                        name: this.name,
+                        price: this.price,
+                        isRed: false
+                    })
+                    this.name = '',
+                        this.price = ''
+
+
+                },
+                del(index) {
+
+
+                    this.List.splice(index, 1);
+
+                },
+                delall() {
+                    let arr = this.List.filter(function (pro, idx) {
+                        if (!pro.isRed) {
+                            return pro;
+                        }
+
+                    });
+                    this.checke = [];
+
+                    this.List = arr;
+
+                },
+                selall(all) {
+
+
+                    if (!all) {
+                        this.List.forEach(function (pro, idx) {
+
+                            pro.isRed = true
+                        });
+                    } else {
+
+
+                        this.List.forEach(function (pro, idx) {
+
+                            pro.isRed = false
+                        });
+                    }
+
+
+
+
+
+
+                },
+                search() {
+
+
+                    let arr1 = this.List.filter((pro, idx) => {
+
+                        if (this.searchName == pro.name) {
+                            return pro;
+                        }
+
+                    });
+
+
+                    this.List = arr1;
+
+
+                }
+
+
+
+            }
+
+
+        });
+    </script>
+
+
+    <script src="jquery-3.3.1.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous">
+    </script>
+
+</body>
+
+</html>
